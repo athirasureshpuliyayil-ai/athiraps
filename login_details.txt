@@ -1,0 +1,56 @@
+ Database Login
+----------------
+
+username : db_admin
+password : admin123
+
+ Email Ids		 Password (password is set as password for every user except admin.)
+-----------		----------
+
+admin@gmail.com    ---> admin123
+
+richard@gmail.com
+
+maria@gmail.com
+
+huan@gmail.com
+
+george@gmail.com
+
+rex@gmail.com
+
+henry@gmail.com
+
+jace@gmail.com
+
+johnsmith@gmail.com
+
+sarahjohnson@gmail.com
+
+emilyroberts@gmail.com
+
+davidwilson@gmail.com
+
+laurabrown@gmail.com
+
+michaellee@gmail.com
+
+rahul@gmail.com
+
+thomas@gmail.com
+
+edward@gmail.com
+
+linda@gmail.com
+
+olivia@gmail.com
+
+sophie@gmail.com
+
+mariagon@gmail.com
+
+anjali@gmail.com
+
+nithin@gmail.com
+
+michaeladams@gmail.com

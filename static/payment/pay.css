@@ -1,0 +1,742 @@
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    font-stretch: normal;
+    src: url(https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsiH0B4gaVc.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-stretch: normal;
+    src: url(https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVc.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-stretch: normal;
+    src: url(https://fonts.gstatic.com/s/opensans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsgH1x4gaVc.ttf) format('truetype');
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
+.center {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#processing {
+    position: relative;
+    width: 100%;
+    /* height: 100vh; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    /* background-color: #e4e4e4; */
+}
+
+#processing.uncomplete .gear-wrapper-1 {
+    -webkit-animation: gearEnter1 0.5s ease 1s forwards;
+    animation: gearEnter1 0.5s ease 1s forwards;
+}
+
+#processing.uncomplete .gear-wrapper-2 {
+    -webkit-animation: gearEnter2 0.5s ease 1.5s forwards;
+    animation: gearEnter2 0.5s ease 1.5s forwards;
+}
+
+#processing.uncomplete .gear-wrapper-3 {
+    -webkit-animation: gearEnter3 0.5s ease 1.25s forwards;
+    animation: gearEnter3 0.5s ease 1.25s forwards;
+}
+
+#processing.uncomplete .gear-wrapper-4 {
+    -webkit-animation: gearEnter4 0.5s ease 0.75s forwards;
+    animation: gearEnter4 0.5s ease 0.75s forwards;
+}
+
+#processing.complete .gears {
+    background-color: transparent;
+    transition: background-color 0.25s ease 0.75s;
+}
+
+#processing.complete .gear-wrapper-1 {
+    transform: rotate(10deg) translate3d(-5px, -5px, 0);
+    -webkit-animation: gearLeave1 0.5s ease 0.5s forwards;
+    animation: gearLeave1 0.5s ease 0.5s forwards;
+}
+
+#processing.complete .gear-wrapper-2 {
+    transform: rotate(25deg) translate3d(20px, -50px, 0);
+    -webkit-animation: gearLeave2 0.5s ease 0.5s forwards;
+    animation: gearLeave2 0.5s ease 0.5s forwards;
+}
+
+#processing.complete .gear-wrapper-3 {
+    transform: rotate(15deg) translate3d(-25px, -15px, 0);
+    -webkit-animation: gearLeave3 0.5s ease 0.5s forwards;
+    animation: gearLeave3 0.5s ease 0.5s forwards;
+}
+
+#processing.complete .gear-wrapper-4 {
+    transform: translate3d(0, 0, 0);
+    -webkit-animation: gearLeave4 0.5s ease 0.5s forwards;
+    animation: gearLeave4 0.5s ease 0.5s forwards;
+}
+
+#processing.complete .loading-bar {
+    -webkit-animation: hideLoading 0.5s forwards;
+    animation: hideLoading 0.5s forwards;
+}
+
+#processing.complete .checkmark.checkmark-success {
+    -webkit-animation: fillCheckSuccess 0.4s cubic-bezier(0.65, 0, 0.45, 1) 1s forwards, beatCheck 0.2s ease-out 1.5s forwards, echoSuccess 1.25s ease-out 1.5s forwards;
+    animation: fillCheckSuccess 0.4s cubic-bezier(0.65, 0, 0.45, 1) 1s forwards, beatCheck 0.2s ease-out 1.5s forwards, echoSuccess 1.25s ease-out 1.5s forwards;
+}
+
+#processing.complete .checkmark.checkmark-success .checkmark-circle {
+    stroke: #3c763d;
+}
+
+#processing.complete .checkmark.checkmark-error {
+    -webkit-animation: fillCheckError 0.4s cubic-bezier(0.65, 0, 0.45, 1) 1s forwards, beatCheck 0.2s ease-out 1.5s forwards, echoError 1.25s ease-out 1.5s forwards;
+    animation: fillCheckError 0.4s cubic-bezier(0.65, 0, 0.45, 1) 1s forwards, beatCheck 0.2s ease-out 1.5s forwards, echoError 1.25s ease-out 1.5s forwards;
+}
+
+#processing.complete .checkmark.checkmark-error .checkmark-circle {
+    stroke: #a94442;
+}
+
+#processing.complete .checkmark-circle {
+    -webkit-animation: strokeCheck 0.5s cubic-bezier(0.65, 0, 0.45, 1) 0.75s forwards;
+    animation: strokeCheck 0.5s cubic-bezier(0.65, 0, 0.45, 1) 0.75s forwards;
+}
+
+#processing.complete .checkmark-check {
+    -webkit-animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 1.25s forwards;
+    animation: strokeCheck 0.3s cubic-bezier(0.65, 0, 0.45, 1) 1.25s forwards;
+}
+
+.wrapper {
+    position: relative;
+    margin: 30px auto;
+}
+
+.gears {
+    width: 200px;
+    height: 200px;
+    background-color: #999;
+    border-radius: 50%;
+    overflow: hidden;
+    transform: scale(0);
+    -webkit-animation: scale 0.5s ease 0.5s forwards;
+    animation: scale 0.5s ease 0.5s forwards;
+}
+
+@-webkit-keyframes scale {
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes scale {
+    to {
+        transform: scale(1);
+    }
+}
+
+.gear-wrapper {
+    position: absolute;
+}
+
+.gear-wrapper.gear-wrapper-1 {
+    top: 0;
+    left: 0;
+    transform: rotate(10deg) translate3d(-40px, -60px, 0);
+}
+
+.gear-wrapper.gear-wrapper-2 {
+    top: 0;
+    right: 0;
+    transform: rotate(25deg) translate3d(70px, -130px, 0);
+}
+
+.gear-wrapper.gear-wrapper-3 {
+    bottom: 0;
+    right: 0;
+    transform: rotate(15deg) translate3d(30px, 20px, 0);
+}
+
+.gear-wrapper.gear-wrapper-4 {
+    bottom: 0;
+    left: 0;
+    transform: translate3d(-70px, 70px, 0);
+}
+
+@-webkit-keyframes gearEnter1 {
+    to {
+        transform: rotate(10deg) translate3d(-5px, -5px, 0);
+    }
+}
+
+@keyframes gearEnter1 {
+    to {
+        transform: rotate(10deg) translate3d(-5px, -5px, 0);
+    }
+}
+
+@-webkit-keyframes gearEnter2 {
+    to {
+        transform: rotate(25deg) translate3d(20px, -50px, 0);
+    }
+}
+
+@keyframes gearEnter2 {
+    to {
+        transform: rotate(25deg) translate3d(20px, -50px, 0);
+    }
+}
+
+@-webkit-keyframes gearEnter3 {
+    to {
+        transform: rotate(15deg) translate3d(-25px, -15px, 0);
+    }
+}
+
+@keyframes gearEnter3 {
+    to {
+        transform: rotate(15deg) translate3d(-25px, -15px, 0);
+    }
+}
+
+@-webkit-keyframes gearEnter4 {
+    to {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes gearEnter4 {
+    to {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@-webkit-keyframes gearLeave1 {
+    from {
+        transform: rotate(10deg) translate3d(-5px, -5px, 0);
+    }
+
+    to {
+        transform: rotate(10deg) translate3d(-40px, -60px, 0);
+    }
+}
+
+@keyframes gearLeave1 {
+    from {
+        transform: rotate(10deg) translate3d(-5px, -5px, 0);
+    }
+
+    to {
+        transform: rotate(10deg) translate3d(-40px, -60px, 0);
+    }
+}
+
+@-webkit-keyframes gearLeave2 {
+    from {
+        transform: rotate(25deg) translate3d(20px, -50px, 0);
+    }
+
+    to {
+        transform: rotate(25deg) translate3d(70px, -130px, 0);
+    }
+}
+
+@keyframes gearLeave2 {
+    from {
+        transform: rotate(25deg) translate3d(20px, -50px, 0);
+    }
+
+    to {
+        transform: rotate(25deg) translate3d(70px, -130px, 0);
+    }
+}
+
+@-webkit-keyframes gearLeave3 {
+    from {
+        transform: rotate(15deg) translate3d(-25px, -15px, 0);
+    }
+
+    to {
+        transform: rotate(15deg) translate3d(30px, 20px, 0);
+    }
+}
+
+@keyframes gearLeave3 {
+    from {
+        transform: rotate(15deg) translate3d(-25px, -15px, 0);
+    }
+
+    to {
+        transform: rotate(15deg) translate3d(30px, 20px, 0);
+    }
+}
+
+@-webkit-keyframes gearLeave4 {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-70px, 70px, 0);
+    }
+}
+
+@keyframes gearLeave4 {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-70px, 70px, 0);
+    }
+}
+
+.gear {
+    fill: #e4e4e4;
+    transform-origin: 50% 50%;
+}
+
+.gear.gear-1 {
+    width: 90px;
+    height: 90px;
+    animation: gearRotate 1s linear 2s infinite reverse;
+}
+
+.gear.gear-2 {
+    width: 150px;
+    height: 150px;
+    -webkit-animation: gearRotate 1.5s linear 2s infinite;
+    animation: gearRotate 1.5s linear 2s infinite;
+}
+
+.gear.gear-3 {
+    width: 60px;
+    height: 60px;
+    animation: gearRotate 0.75s linear 2s infinite reverse;
+}
+
+.gear.gear-4 {
+    width: 120px;
+    height: 110px;
+    -webkit-animation: gearRotate 1.25s linear 2s infinite;
+    animation: gearRotate 1.25s linear 2s infinite;
+}
+
+@-webkit-keyframes gearRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes gearRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-bar {
+    position: relative;
+    width: 200px;
+    height: 10px;
+    margin-top: 50px;
+    background-color: #e4e4e4;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.loading-bar span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: #999;
+    transition: width 0.5s ease;
+}
+
+@-webkit-keyframes hideLoading {
+    to {
+        height: 0;
+        margin: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes hideLoading {
+    to {
+        height: 0;
+        margin: 0;
+        opacity: 0;
+    }
+}
+
+.checkmark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    display: block;
+    border-radius: 50%;
+    stroke-width: 1px;
+    stroke: #fff;
+    stroke-miterlimit: 10px;
+}
+
+.checkmark-circle {
+    fill: none;
+    stroke-dasharray: 200px;
+    stroke-dashoffset: 200px;
+    stroke-width: 1px;
+    stroke-miterlimit: 10px;
+}
+
+@-webkit-keyframes fillCheckSuccess {
+    to {
+        box-shadow: inset 0 0 0 100px #3c763d;
+    }
+}
+
+@keyframes fillCheckSuccess {
+    to {
+        box-shadow: inset 0 0 0 100px #3c763d;
+    }
+}
+
+@-webkit-keyframes fillCheckError {
+    to {
+        box-shadow: inset 0 0 0 100px #a94442;
+    }
+}
+
+@keyframes fillCheckError {
+    to {
+        box-shadow: inset 0 0 0 100px #a94442;
+    }
+}
+
+@-webkit-keyframes beatCheck {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes beatCheck {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@-webkit-keyframes echoSuccess {
+    from {
+        box-shadow: inset 0 0 0 100px #3c763d, 0 0 0 0 #3c763d;
+    }
+
+    to {
+        box-shadow: inset 0 0 0 100px #3c763d, 0 0 0 50px transparent;
+    }
+}
+
+@keyframes echoSuccess {
+    from {
+        box-shadow: inset 0 0 0 100px #3c763d, 0 0 0 0 #3c763d;
+    }
+
+    to {
+        box-shadow: inset 0 0 0 100px #3c763d, 0 0 0 50px transparent;
+    }
+}
+
+@-webkit-keyframes echoError {
+    from {
+        box-shadow: inset 0 0 0 100px #a94442, 0 0 0 0 #a94442;
+    }
+
+    to {
+        box-shadow: inset 0 0 0 100px #a94442, 0 0 0 50px transparent;
+    }
+}
+
+@keyframes echoError {
+    from {
+        box-shadow: inset 0 0 0 100px #a94442, 0 0 0 0 #a94442;
+    }
+
+    to {
+        box-shadow: inset 0 0 0 100px #a94442, 0 0 0 50px transparent;
+    }
+}
+
+.checkmark-check {
+    stroke: #fff;
+    stroke-dasharray: 100px;
+    stroke-dashoffset: 100px;
+    transform-origin: 50% 50%;
+}
+
+@-webkit-keyframes strokeCheck {
+    to {
+        stroke-dashoffset: 0px;
+    }
+}
+
+@keyframes strokeCheck {
+    to {
+        stroke-dashoffset: 0px;
+    }
+}
+
+.amex {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAeCAMAAABdem3zAAAAA3NCSVQICAjb4U/gAAACi1BMVEUAAAAAAAAAdKIAdqcGdqoDeqkDeKoDe6sFeqoFeqwCeqoGe6wGeasGeqwGe6wFeqwFeqwFeqsGe6oFeawEeqwEeqwFe6wHeaoFe6oFeasFe6wFeawHe6wIfKwJfKwKfa0Lfa0Mfq0Of64Pf64QgK8RgK8Sga8TgbAUgrAVgrAWg7EXg7EYhLEZhLIahbIbhbIdhrMfh7QgiLQhiLQjirUkirUli7YnjLYojLcqjbcsj7gtj7kukLkvkLkwkbkxkboykrozkro0k7s1k7s2lLs3lLw4lbw5lbw6lr07lr08l709l75Amb9Bmr9Dm8BFnMBHncFIncFJnsJKnsJLn8JMn8NNoMNOocRPocRQosRRosVUpMZVpMZWpcZXpcdYpsdZp8dap8dbqMheqclgqslhq8pjrMpkrMtnrsxpr8xqr81tsc5vss5wss9xs89ztNB0tdB1ttF6uNJ8udN9utN+utR/u9SAu9SBvNWCvNWDvdWEvdWGvtaHv9aIv9eKwNeMwdiPw9mQw9mRxNqTxdqUxtuVx9uWx9yXyNyYyNyZyd2ayd2byt2cyt6dy96fzN+gzN+hzd+izeCjzuCkzuCn0OGp0eKq0eKr0uOs0+Ot0+Ov1OSw1eSy1uWz1uW01+W32Oa62ui72+i82+i+3Om/3enC3urE3+vF4OvH4ezI4uzJ4u3K4+3L4+3N5O7O5e7P5e/R5u/S5/DT5/DV6PHW6fHX6fHY6vHa6/Lb7PPc7PPd7fPe7fTf7vTg7vTi7/Xj8PXk8fbm8vbn8vfo8/fp8/fq9Pjr9Pjs9fjt9fnu9vnv9vnw9/rx9/ry+Prz+Pv0+fv1+fv2+vz4+/z5+/37/P38/f7+/v7///+B6xdgAAAAHHRSTlMAARYaJ0FIT1pcYG6YmZyssrPDys3T2tvt9PX+1nJQbwAAAnFJREFUOMtjYOAWESMWiAqwMzBwyZAEOBn4SdMgzCBImgYJUjVI0UeDkoGBrq6BgZ6MhgECqAA56nJ6ICZIWN3AQAeuoevIrvOHDuy6ZLl1366ru3ft2nVl167dJ08cOXHo/P6Dl3Yd33Nm15mdJw+thGnQO2ei2nzDRaZp405Zmd2KxhYWW2TMTeUmJOWv0NOPKVJ1uNEi4329LByuoXKaabvZNZcQw8u5IUANrYuX7pA5eNSxJCk/OPfGBe2ZKotbnAw6kTSs8Axslpnh0mtRr74YqME7LGaHjI6G4uakfOfGG21q3c5hLf7TNDMQGhqUMjN9vFz6O2TCjgA11M+Zs13m4oXIvKT8bOs+i7DMNJks/xuhcggNKQ3b+vfGpS65kLTqVNyRpLi4uP1xl6d09jRPPF+blHC29WB+SsX5PXF1cA0lE/1lWiZOnFg2saZrIgxkgojiyr6JZTLxQFZ5ycSJpRTHdOAmMMiM2Agk103esGnTxiWzwELTVwOJyes29aFqiFtrCQR+x05FuVpaWqcfA3I8FlQDyandjpaWh5KtLI3RNCxTA8ZypHewb7vNrvWKk2QW7wiIzU3YteusXtXWrQvllm+diK5BRl6+4JyW2omJ2qkRiqtknN2VF+UCxWbmKCi5b3GU1fRE16B+4cK5RCe3pH6z6bP3nZOZsyYoMzftwsWrp4+skZt/4kA1mqfjVqgAgcORw/Z23kejg86r7JxXm1AIFOqzVdFLAEoahaNqiDgMBplZQGKNjC6QbD0MA3vmAomN5XTLcaQASQZe0jSIM3CQpoGPgZFHmgT1QkwMDAzMrOxEAjYWBgYAvI9h1MHdhQIAAAAASUVORK5CYII=") #fff;
+}
+
+.visa {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAeCAMAAABdem3zAAAAA3NCSVQICAjb4U/gAAABvFBMVEUAAADQ0NDa2tra2trZ2dnY2Nja2trt7e3t7e0mM3onNHspNXkqN30rN30sOH4tN3ovO4AwPIAyPoE1QYM3Q4Q4Q4U4RIU5RYY8R4g9SIhCTYtDToxGUY5HUo5JU49JVJBOWJJQW5RSXJVTXZZVX5dXYZhYYplaY5pfaJ1kbaBlbqFoaZFocaNpcqNqc6RtdqZvd6dzcpV0fKp2f6x5ga18g698hK99hK99hbB+hrCAh7GDi7OHjrWIj7aJkLeNk7mNlLqOlbqRl7yUmr6WnL6YnsCbocKepMSjqMekqceprsqrsMysscytss2uss2xts+xttC0uNG1udK1utK2utK3u9O6vdS7v9W8wNa9wda9wdfBxNnDx9rEx9vFyNzFydvHy93Kzd/Mz+DR0+LS1OPT1uTVnV/V1+XX2ebY2NjZuJbZ2+faoVza3Ojc3+rf4evf4ezi5O7j5e7n6fHp6/Lq6/Lr7PPsmC3snTfs7fPunjnu7/Tu7/Xw8fbx8vfy8/f09fj09fn19vn29/r3z5332LH39/r42LD42bL42bP5+fv76tX77dz7+/v7+/387dv9/f7+9ev//v3///9+dhG/AAAACXRSTlMAGxuq7e7u+vsOT6YMAAABbklEQVQ4y+WUV1cTYRQAlwSIsxoLltgLKgZ7AwV777FiL9gT1x4FGxpb0Gg0On/YBx83D+wz8z7nu+fe800QpNKtpTHSmk4FQUt7pu4YqWfaW4L0BBOQSQdt9SRCvS0omYjSOBZ+fB0d/f5T/VQoDHi6cF4b1/Zt6d9fUZ+cLFyMvfDny6vhN3/1EOwegW4/LAHgpb6bBpNr8ZE2PBz+rQvIvrgJ2+2DdaeOba7pXoBbceHAxHvfHIRNHoHjLobLqlZnkIeDcaHIlAeuh6Jb4bb9EG58rh6G4nTWNNnSHFYNZcnrcsKK1d4Qpl63MY9lrmRmE6GHcCdc0Q7mqt5ZAfM9C7uKvfA0LlyASSzUt7Daz+pIyGw7+c+JuPAxCxzV+7DHrq5tOzqhbxA6crlcSE+TS+dhVk0vwRk7AFhb64a76lIWva7EhKEoKqvvo6jqs6sD526UNYoeq5ajR78a4/k/JM5M4pAlTGUqSBrjf5znrWNE0ZcCAAAAAElFTkSuQmCC") #fff;
+}
+
+.mastercard {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAeCAMAAABdem3zAAAAA3NCSVQICAjb4U/gAAACc1BMVEUAAADQ0NDa2tra2trZ2dnY2Nja2trt7e3t7e3MAADMAQHMBATNCQnOCwvODAzODg7PDwnPERHRGxvSFgfSHh7SHx/SIB7THhDTJCTTJibTJyfUKSnVIAXVLS3VMDDWMjLWNTXWNjbXIQDXLyLXNS7XNzfXOzvYLxbYPT3YPj7Y2NjZOy/ZRUXaSEjaSUnbLQDbLgDbS0vbTU3cSj/cU1PdNADdSjTdVVXdVlbeNwDeW1vfYmLgUDPgZWXgZmbgaGjhXkvhamrhbW3ia2Lib2/jXDfja1njdXXkeHjkeXnke3vlgIDlgYHmg4PmhITmhobnh4fniIjni4voVgDojIzokJDqXADqaiTqlpbqmJjqmZnqmprrnJzrn5/tpqbuqqrura3urq7vsbHvsrLvs7PwbADwbQDwtLTwtbXwt7fxvLzycgDyjULyvr7yv7/zdQDzmVvzn2fzxMTzxcXzx8f2fwD21tb3gQD3x6/3ybL32Nj4hAD43t7439/44OD5iQD54eH54uL65ub65+f76+v7+/v88vL89PT99/f9+Pj9+fn+lwD+/f3/mQD/mgT/nQv/nw//oRT/oRX/oRb/ohj/qCf/qSn/qSr/qy3/rDH/rjX/rjb/sT7/sj//s0L/tEX/tUf/tUj/tkn/t0v/uVD/uVH/u1X/vFj/vVr/vl7/v2H/w2n/xGz/x3P/yHb/yXr/zob/z4j/0Iv/1Zj/1pr/153/2J7/26X/3q7/4LL/4LP/4bX/4bb/5cD/5sL/58P/58T/58X/6sz/7NH/7dL/8d7/8t//9OX/9eb/9ef/9ur/9+v/+vT/+/X//Pj//fz///90HdR0AAAACXRSTlMAGxuq7e7u+vsOT6YMAAABmElEQVQ4y2NgYGJm0SISsDAzMTAwsrG3XiAStLKzMTIwc1wgAbAzM7C2kqKhlZVB6wJJQItSDS3R5orSmo7pPUD2+d2r506bvWzLKdwaOr14OSFAMuXCzqm9ENC//hwODc2KnHDAVdCLALNOYNXQLo9QzylgGoykY+YZbBqckNSrpKamdSPpWINFQw03kgZhJSUlSyQNfUcxNfjzyfFISUDUi5WCQO+EOZOgGmZswNSgY3VBpyPOxJZf1d4uWdxZW9k45+SBtStWTVowffH8o/MxNUgHNsY0entmxrW5R6VnhNb6NlVu6p247uCOs3sOH941DYuG9MTa3JCiGp+S+CzdrrziBOuK5b1L9x8/tG3vko0bsWjQafCKaIhNqon0qyvzqApyKZMtPLZl8/bTR1Zv3Xd6JRYnBeiJChkJGqppWIgoKKi7mTnIVC9YPHnhnHlTJiyaM3EDgWANz87OLicQrCgRx6VvYJBPIOJQk4ZNWD3BpIGS+DhdCSc+0pM3JAOpkpCBaJOnSS5mSC7ISCwqgYUriYUxAINRRW57ksG5AAAAAElFTkSuQmCC") #fff;
+}
+
+.discover {
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAeCAMAAABdem3zAAAAA3NCSVQICAjb4U/gAAACLlBMVEUAAADQ0NDa2tra2trZ2dnY2Nja2trt7e3t7e3vzbDvzbEBAQECAgIDAwMTExMUFBQWFhYYGBgZGRkeHh4jIyMmJiYnJycpKSksLCwtLS0uLi4wMDAzMzM0NDQ3Nzc6Ojo8PDw/Pz9CQkJDQ0NHR0dJSUlKSkpMTExOTk5PT09RUVFWVlZYWFhcXFxgYGBiYmJjY2Nra2tsbGxtbW1wcHBxcXF0dHR1dXV2dnZ3d3d4eHh8fHx9fX1+fn6AgICBgYGCgoKDg4OLi4uMjIyPj4+VlZWWlpabm5udnZ2enp6fn5+hoaGjo6OoqKirq6usrKyvr6+wsLCysrKzs7O4uLi7u7u8vLy9vb2/v7/AwMDBwcHExMTGxsbHx8fJycnLy8vQ0NDR0dHS0tLU1NTW1tbY2NjZ2dnb29vd3d3f39/h4eHi4uLn5+fo6Ojp6enr6+vs7Ozt7e3v7+/x8fHy8vL1giD1giH1gyP1hCT1iS31ii71izD1jDL2kTv2kjz2kz/2lED2lkP2lkT2l0X2mUn2pmH2pmL3m033n1X3oVf3pF73pV739/f4q2n4q2r4rWz4r3D4r3H4sXT4s3f5uoT5u4b5vov5+fn6xJb6yJ36yqD6zKT6+vr7zqj70a372Ln7+/v83sT838b84Mj84sv848785M/85dD89O78/Pz959X96Nb969z9/f3+8+r+9e7+9u/+9/H++PP++vb++vf+/Pn+/Pr+/fz+/v7////OeAUcAAAAC3RSTlMAGxuq7e7u+vv7+w/+RoMAAAGnSURBVDjLY2BgYmZJJRKwMDMxMDCysS/YSSRYwM7GyMDMsZMEwM7MwLqAFA0LWBlSd5IEUumkwc7A0HPBTuvcTAN13535FuqWJTsXdrdP2+IZuHOnR6iNgYHVDgMDsySEBin3QE2NnWJpKk6x8T1iDsku6UvKSktL+4Kld84RzBb3Co9ZyRPnJYikIXHnAr5ssTR9hYCVIfIg8UmlILBCOMFfa6e4jWvQWh5/e0kUDTuFMsTSpvvI6gUog8QngzVsdDRVC9spbu7st5bbmL8ASUNEipEi0ElRRQEyhYL+K/2Tl5cD1U/cmSMgsXOneHRe3krenSpuCA26ckp2xTu1s2xFZSJ3JqiJqKbvXNrbOWPrzp0m3jt36sjJyS2Q35ms0rNz53wSg3VRI2kaVlc1kKRhVU0pSRoWVZaSpGF2RSkpGjZNAMcM0RoW15aSomE9JOKJ1bB1VnUpCRq2z6srLSVew+ZZyMoJalgzpbq0lGgNG+Z2lGKAplQcxcy6uV3lpVhAKyuWgmzLwqktpTgAJzNaUblt2cz+xnocoLmNiw1YuJJYGAMAEKBGzN/0FVAAAAAASUVORK5CYII=") #fff;
+}
+
+.expiry-date-group {
+    float: left;
+    width: 50%;
+}
+
+.expiry-date-group input {
+    width: calc(100% + 1px);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.expiry-date-group input:focus {
+    position: relative;
+    z-index: 10;
+}
+
+.security-code-group {
+    float: right;
+    width: 50%;
+}
+
+.security-code-group input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.zip-code-group {
+    margin-top: 5px;
+    clear: both;
+}
+
+#PayButton {
+    outline: 0 !important;
+    height: 42px;
+    font-size: 16px;
+    background-color: #54c7c3 !important;
+    border: none;
+}
+
+#PayButton:hover {
+    background-color: #6dcecb !important;
+}
+
+#PayButton:active {
+    background-color: #4fbcb9 !important;
+}
+
+#PayButton:disabled {
+    background: rgba(84, 199, 195, 0.5) !important;
+    color: #fff !important;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+#Checkout {
+    z-index: 100001;
+    /* background: ; */
+    width: 100%;
+    min-width: 300px;
+    height: 100%;
+    min-height: 100%;
+    background: 0 0 #ffffff;
+    border-radius: 8px;
+    border: 1px solid #dedede;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#Checkout>h1 {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    background: #eef2f4;
+    color: #5d6f78;
+    font-size: 24px;
+    font-weight: 300;
+    border-bottom: 1px solid #dedede;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#Checkout>form {
+    margin: 0 25px 25px;
+}
+
+label {
+    color: #46545c;
+    margin-bottom: 2px;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input-container input {
+    padding-right: 25px;
+}
+
+.input-container>i,
+a[role="button"] {
+    color: #d3d3d3;
+    width: 25px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.input-container>i:hover,
+a[role="button"]:hover {
+    color: #777;
+}
+
+.amount-placeholder {
+    font-size: 20px;
+    height: 34px;
+}
+
+.amount-placeholder>button {
+    float: right;
+    width: 60px;
+}
+
+.amount-placeholder>span {
+    line-height: 34px;
+}
+
+.card-row {
+    text-align: center;
+    margin: 20px 25px 10px;
+}
+
+.card-row span {
+    width: 48px;
+    height: 30px;
+    margin-right: 3px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-size: contain;
+}
+
+.card-image {
+    background-repeat: no-repeat;
+    padding-right: 50px;
+    background-position: right 2px center;
+    background-size: auto 90%;
+}
+
+.submit-button-lock {
+    height: 20px;
+    margin-top: -2px;
+    margin-right: 7px;
+    vertical-align: middle;
+    background: url("data:image/png;base64,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NQxdFfpzGC4sNKwm7Hm4VXh+eHcELWJFREPEu0iPyNLIR4uNFksWd0bJR8VF1UdNRXtFl0VLl1gsWbPkRoxajCCmPRYfGxV7JHZyqffS3UuH4+ziCuPuLjNclrPs2nK15anLz66QX8FZcSoeGx8d3xD/iRPCqeVMrvRfuXflBNeTu4f7kufGK+eN8V34ZfyRBJeEsoTRRJfEXYljSa5JFUnjAk9BteB1sl/ygeSplJCUoykzqdGpzWmEtPi000IlYYqwK10zPSe9L8M0ozBDuspp1e5VE6JA0ZFMKHNZZruYjv5M9UiMJJslg1kLs2qy3mdHZZ/KUcwR5vTkmuRuyx3J88n7fjVmNXd1Z752/ob8wTXuaw6thdauXNu5Tnddwbrh9b7rj20gbUjZ8MtGy41lG99uit7UUaBRsL5gaLPv5sZCuUJR4b0tzlsObMVsFWzt3WazrWrblyJe0fViy+KK4k8l3JLr31l9V/ndzPaE7b2l9qX7d+B2CHfc3em681iZYlle2dCu4F2t5czyovK3u1fsvlZhW3FgD2mPZI+0MqiyvUqvakfVp+qk6oEaj5rmvep7t+2d2sfb17/fbX/TAY0DxQc+HhQcvH/I91BrrUFtxWHc4azDz+ui6rq/Z39ff0TtSPGRz0eFR6XHwo911TvU1zeoN5Q2wo2SxrHjccdv/eD1Q3sTq+lQM6O5+AQ4ITnx4sf4H++eDDzZeYp9qukn/Z/2ttBailqh1tzWibakNml7THvf6YDTnR3OHS0/m/989Iz2mZqzymdLz5HOFZybOZ93fvJCxoXxi4kXhzpXdD66tOTSna6wrt7LgZevXvG5cqnbvfv8VZerZ645XTt9nX297Yb9jdYeu56WX+x+aem172296XCz/ZbjrY6+BX3n+l37L972un3ljv+dGwOLBvruLr57/17cPel93v3RB6kPXj/Mejj9aP1j7OOiJwpPKp6qP6391fjXZqm99Oyg12DPs4hnj4a4Qy//lfmvT8MFz6nPK0a0RupHrUfPjPmM3Xqx9MXwy4yX0+OFvyn+tveV0auffnf7vWdiycTwa9HrmT9K3qi+OfrW9m3nZOjk03dp76anit6rvj/2gf2h+2P0x5Hp7E/4T5WfjT93fAn88ngmbWbm3/eE8/syOll+AAAAYFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////98JRy6AAAAH3RSTlMAAgYMEyIzOUpTVFViY3N2gJmcnaipq7fX3ebx+Pn8eTEuDQAAAI9JREFUKM/N0UkOglAQRdFHDyK90n64+9+lAyQgookjuaNKTlJJpaQlO2n6sW8SW/uCjrku2EloWDLhi3gDa4O3pTtA5Tt+BXDbiDsBmSQpAyZ3pRhoLUmS1QLxSilQPOcCSFfKgfxgPgfZ9ch7Y21LCcdd5wVH5SckEzkXc0ylpPJnMpETmX/d9eUpH1/5AKrsQVrz7YPBAAAAAElFTkSuQmCC") center center/contain no-repeat;
+    width: 14px;
+    display: inline-block;
+}
+
+.align-middle {
+    vertical-align: middle;
+}
+
+input {
+    box-shadow: none !important;
+}
+
+input:focus {
+    border-color: #b0e5e3 !important;
+    background-color: #eef9f9 !important;
+}
+
+
+.success-animation {
+    display: none;
+    color: green;
+    font-size: 24px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.success-icon {
+    font-size: 50px;
+    color: green;
+}
+
+.animation-container {
+    display: none;
+    /* Initially hidden */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    height: 100%;
+    /* Full height of modal body */
+}

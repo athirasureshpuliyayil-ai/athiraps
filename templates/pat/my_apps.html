@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="content container-fluid">
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Appointments</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'patient_home' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">View Aappointment</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0 datatable">
+                            <thead>
+                                <tr>
+
+                                    <th>Appointment Number</th>
+                                    <th>Patient Name</th>
+                                    <th>Date of Appointment</th>
+                                    <th>Alloted Time</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in my_appointments %}
+                                <tr>
+                                    <td>{{i.appointmentnumber}}</td>
+                                    <td>{{i.fullname}}</td>
+                                    <td>{{i.date_of_appointment}}</td>
+                                    <td>{{i.time_of_appointment}}</td>
+                                    {% if i.status == '0' %}
+                                    <td>Not Updated Yet</td>
+                                    {% else %}
+                                    <td>{{ i.status}}</td>{% endif %}
+                                    {% if i.status == '0' or i.status == 'Approved' %}
+                                    <td><a data-toggle="modal"
+                                        data-target="#cancelModal{{i.id}}" class="btn btn-danger btn-sm text-white">Cancel</a></td>
+                                    {% else %}
+                                    <td></td>
+                                    {% endif %}
+                                </tr>
+                                <!-- Modal -->
+                                <div class="modal fade" id="cancelModal{{i.id}}" tabindex="-1" role="dialog"
+                                    aria-labelledby="cancelModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="cancelModalLabel">Confirmation</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure, you want to cancel this appoinment ? This action cannot be undone !
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">No Go back</button>
+                                                <a href="{% url 'cancelappointment' i.id %}" class="btn btn-danger">Yes, Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                        <!-- Pagination controls -->
+                        <div class="pagination" style="padding-top: 20px;padding-bottom: 20px;text-align: center;">
+                            <span class="step-links">
+                                {% if my_appointments.has_previous %}
+                                <a href="?page=1">&laquo; First</a>
+                                <a href="?page={{ my_appointments.previous_page_number }}">Previous</a>
+                                {% endif %}
+
+                                <span class="current">
+                                    Page {{ my_appointments.number }} of {{ my_appointments.paginator.num_pages }}.
+                                </span>
+
+                                {% if my_appointments.has_next %}
+                                <a href="?page={{ my_appointments.next_page_number }}">&nbsp;Next</a>
+                                <a href="?page={{ my_appointments.paginator.num_pages }}">&nbsp;Last &raquo;</a>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

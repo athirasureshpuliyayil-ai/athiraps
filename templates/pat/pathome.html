@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="content container-fluid">
+   <div class="page-header">
+      <div class="row">
+         <div class="col-sm-12">
+            <h3 class="page-title">Welcome {{ user.first_name }} {{ user.last_name }}!</h3>
+            <ul class="breadcrumb">
+               <li class="breadcrumb-item active">Dashboard</li>
+            </ul>
+         </div>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-xl-4 col-sm-6 col-12 d-flex">
+         <div class="card bg-one w-100">
+            <div class="card-body">
+               <div class="db-widgets d-flex justify-content-between align-items-center">
+                  <div class="db-icon">
+                     <i class="fas fa-file"></i>
+                  </div>
+                  <div class="db-info">
+                     <h3>{{allaptcount}}</h3>
+                     <h6>My Appointments</h6>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="row">
+      <div class="card">
+         <div class="card-body">
+            <div class="container">
+               <h3>Not sure about your disease ? Don't worry ! chat with us and diagnose your disease.</h3>
+               <div class="text-center">
+                  <a class="btn btn-success" href="{% url 'chat' %}">Chat Now</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

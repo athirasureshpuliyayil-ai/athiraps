@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="content container-fluid">
+
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Medical History</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'patient_home' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">My Medical History</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        {{message}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% for appointment in appointments %}
+                    <div class="card">
+                        <h6 class="card-header">Date: {{appointment.date_of_appointment}}</h6>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+
+                                    <tr>
+                                        <th>Message</th>
+                                        <td>{{appointment.additional_msg}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Doctor</th>
+                                        <td>{{appointment.doctor_id}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Doctor Findings</th>
+                                        <td colspan="4">{{appointment.findings}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Prescribed Medicine</th>
+                                        <td colspan="4">{{appointment.prescription}}</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <h5 class="text-center">No Records Available</h5>
+                    {% endfor %}
+
+                    <!-- Pagination controls -->
+                    <div class="pagination" style="padding-top: 20px;padding-bottom: 20px;text-align: center;">
+                        <span class="step-links">
+                            {% if appointments.has_previous %}
+                            <a href="?page=1">&laquo; First</a>
+                            <a href="?page={{ appointments.previous_page_number }}">Previous</a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ appointments.number }} of {{ appointments.paginator.num_pages }}.
+                            </span>
+
+                            {% if appointments.has_next %}
+                            <a href="?page={{ appointments.next_page_number }}">Next</a>
+                            <a href="?page={{ appointments.paginator.num_pages }}">Last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+{% endblock %}

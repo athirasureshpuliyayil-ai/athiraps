@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">  
+    <link rel="icon" href="{% static 'img/icon.ico' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Chat Application</title>
+    <link rel="stylesheet" href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css'%}">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css'%}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css'%}">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+    <style>
+        body {
+            background-color: #EFF5FF;
+            /* Background color for the entire body */
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            /* Prevent scrolling */
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #0463FA;
+            /* Sidebar color */
+            color: white;
+            transition: width 0.3s;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: 0;
+            /* Completely hide the sidebar */
+        }
+
+        .sidebar .toggle-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            /* Positioning the toggle button inside the sidebar */
+            background-color: transparent;
+            /* Transparent background */
+            border: none;
+            /* No border */
+            color: white;
+            /* White icon color */
+            cursor: pointer;
+            /* Pointer cursor on hover */
+        }
+
+        .chat-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #EFF5FF;
+            /* Header color */
+            color: #0463FA;
+            padding: 10px 20px;
+            transition: margin-left 0.3s;
+            /* Smooth transition for margin change */
+        }
+
+        .logo {
+            height: 60px;
+            width: 60px;
+            transform: translateY(-10%);
+        }
+
+        .header.expanded {
+            margin-left: 0;
+            /* No margin when sidebar is expanded */
+        }
+
+        .header.collapsed {
+            margin-left: 60px;
+            /* Move header slightly right when sidebar is collapsed */
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            padding: 20px;
+            background-color: #EFF5FF;
+            /* Chat interface color */
+            max-height: calc(100vh - 130px);
+            /* Adjust height based on header and input group height */
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+        }
+
+        .user-message {
+            text-align: right;
+            /* Align user messages to the right */
+        }
+
+        .bot-message {
+            text-align: left; /* Align bot messages to the left */
+            display: flex;
+            align-items: flex-start; /* Align icon and message at the top */
+            flex-wrap: wrap; /* Allow the button to wrap to the next line */
+        }
+
+        .bot-icon {
+            flex-shrink: 0; /* Prevent icon from shrinking */
+            /* margin-top: 5px; */
+            margin-right: 10px; /* Space between icon and message */
+        }
+
+        .bot-icon img {
+            width: 40px; /* Adjust image size */
+            height: 40px; /* Keep proportions */
+            object-fit: contain; /* Ensure the image fits within the dimensions */
+            border-radius: 50%; /* Optional: make the image circular */
+        }
+
+        .user-message p {
+            background-color: #007bff;
+            color: white;
+            border-radius: 10px;
+            display: inline-block;
+            padding: 10px;
+        }
+
+        .bot-message p {
+            color: black;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: medium;
+            border-radius: 10px;
+            display: inline-block;
+            padding: 10px;
+
+            white-space: pre-wrap; /* Prevents text from wrapping */
+            overflow: hidden; /* Hides the overflowing text */
+            width: 100%; /* Initially hide all text */
+            margin: 0; /* Remove default margin */
+            max-width: calc(100% - 50px);
+            animation: 
+                typing 1.5s steps(40, end), /* Adjust duration as needed */
+                blink-caret 0.75s step-end infinite; /* Adds blinking caret */
+        }
+
+        .bot-message p span {
+            display: inline-block;
+            white-space: pre-wrap; /* Prevent wrapping within individual spans */
+            overflow: hidden; /* Hide overflowing text during typing animation */
+        }
+
+        .input-group {
+            padding: 20px;
+            /* Add padding around input */ 
+            bottom: 50px;
+            position: relative;
+            /* Change to relative positioning */
+        }
+
+        #user_input {
+            height: 50px;
+            /* border-radius: 10px; */
+        }
+
+        #validation_error {
+            text-align: center;
+            color: red;  
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: larger;
+            margin-top: 5px;
+        }
+
+        .input-group-append {
+            margin-left: -5px; /* Reduce space between input and button */
+            z-index: 1; /* Ensure button appears above other elements*/
+        }
+
+        #send_btn {
+            height: 50px; /* Match height of input box */
+            border-radius: 0 10px 10px 0; /* Rounded corners only on the right side */
+            z-index: 1; /* Ensure button appears above other elements*/
+        }
+
+        .input-group-prepend button {
+            height: 50px; /* Match height of input box */
+            width: 50px;
+            border-radius: 10px 0 0 10px; /* Rounded corners on left side */
+            margin-right: -5px; /* Adjust spacing */
+            z-index: 1;
+        }
+
+        .tts-button-container {
+            text-align: left; /* Align button with the message */
+            width: 100%; /* Ensure the button spans the full width */
+            margin-left: 50px; /* Align with the start of the message */
+        }
+
+        .text-to-speech-btn {
+            display: inline-flex; /* Keeps the button inline */
+            align-items: center; /* Centers icon and text vertically */
+            font-size: 16px;
+            color: #007bff;
+        }
+
+        .text-to-speech-btn i {
+            font-size: 18px; /* Icon size */
+        }
+
+        .info h2 {
+            overflow: hidden; /* Ensures the content is not revealed until the animation */
+            white-space: nowrap; /* Keeps the content on a single line */
+            margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+            animation: 
+                typing1 2.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+        }
+
+        button:focus, 
+        input:focus, 
+        textarea:focus {
+            outline: none !important; /* Forcefully removes the outline */
+            box-shadow: none !important; /* Forcefully removes any shadow */
+            border: none !important; /* Removes border if applied during focus */
+            transition: none !important; /* Disables animations */
+            transform: none !important; /* Disables scaling effects */
+        }
+
+        @keyframes typing1 {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* The typing effect */
+        @keyframes typing {
+            from { clip-path: inset(0 100% 0 0); }
+            to { clip-path: inset(0 0 0 0);}
+        }
+
+        /* The typewriter cursor effect */
+        @keyframes blink-caret {
+            from, to { border-right-color: transparent }
+            50% { border-right-color: black; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn btn-lg" id="toggleSidebar"><i class="fas fa-times"></i></button> <!-- Stable sidebar icon -->
+    </div>
+
+    <div class="chat-container">
+        <div class="header" id="header">
+            <h2><img class="logo" src="{% static 'img/docbot.png' %}" alt="DoctorBot" height="60px" width="60px"> Chat App</h2>
+        </div>
+
+        <!-- Bootstrap container for chat interface -->
+        <div class="container"> 
+            <div class="info text-center mt-4 mb-4" id="info">
+                <h2>Start Your Conversation with a Hai </h2>
+            </div>
+            <div id="validation_error" style="display: none;">Message cannot be empty !</div>
+            <div class="chat-box" id="chatbox"></div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <button id="mic_btn" class="btn btn-secondary">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <input type="text" id="user_input" class="form-control" placeholder="Type your message here..."
+                    aria-label="User input">
+                <div class="input-group-append">
+                    <button id="send_btn" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'assets/js/jquery-3.6.0.min.js'%}"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script>
+        $(document).ready(function () {
+            $('#send_btn').on('click', function () {
+                const userInput = document.getElementById("user_input").value.trim();
+                const errorDiv = document.getElementById("validation_error");
+
+                if (userInput === "") {
+                    // Show error message
+                    errorDiv.style.display = "block";
+                } else {
+                    // Hide error message and process the input
+                    errorDiv.style.display = "none";
+                    sendMessage();
+                }
+            });
+    
+            $('#user_input').on('keypress', function (e) {
+                if (e.which === 13) { // Enter key pressed
+                    const userInput = document.getElementById("user_input").value.trim();
+                    const errorDiv = document.getElementById("validation_error");
+
+                    if (userInput === "") {
+                        // Show error message
+                        errorDiv.style.display = "block";
+                    } else {
+                        // Hide error message and process the input
+                        errorDiv.style.display = "none";
+                        sendMessage();
+                    }
+                }
+            });
+
+            $('#mic_btn').on('click', function () {
+                startVoiceRecognition();
+            });
+    
+            function sendMessage() {
+                var infoDiv = document.getElementById('info');
+                infoDiv.style.display = 'none';
+                const userMessage = $('#user_input').val().trim();
+                if (userMessage === '') return;
+    
+                // Append user's message to chatbox
+                $('#chatbox').append('<div class="chat-message user-message"><p>' + userMessage + '</p></div>');
+                $('#user_input').val('');
+    
+                // Send message to server
+                $.ajax({
+                    url: '{% url "chat" %}', // Django URL for the view
+                    method: 'POST',
+                    data: {
+                        'message': userMessage,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        // Create a new bot message container
+                        const botMessageContainer = $('<div class="chat-message bot-message"></div>');
+                        const typingEffectElement = $('<p></p>'); // Placeholder for typing animation
+                        const imageUrl = "{% static 'img/docbot.png' %}";
+                        const iconElement = $(`<div class="bot-icon"><img src=${imageUrl} alt="Bot Icon"></div>`);
+
+                        // Append icon and typing element to bot message
+                        botMessageContainer.append(iconElement);
+                        botMessageContainer.append(typingEffectElement);
+                        $('#chatbox').append(botMessageContainer);
+    
+                        const botMessage = (response.bot_message || 'Sorry, something went wrong.');
+
+                        // Add text-to-speech button
+                        const ttsButton = $('<button class="btn btn-link text-to-speech-btn"><i class="fas fa-volume-up"></i></button>');
+                        ttsButton.on('click', function () {
+                            textToSpeech(botMessage);
+                        });
+
+                        // Append TTS button below the message container
+                        const ttsButtonContainer = $('<div class="tts-button-container"></div>');
+                        ttsButtonContainer.append(ttsButton);
+                        botMessageContainer.append(ttsButtonContainer);
+    
+                        // Split message by <br> and ensure it handles multiple line breaks correctly
+                        const lines = botMessage.split(/(<br\s*\/?>)+/); // Split at <br> tags
+    
+                        // Function to display each line sequentially
+                        function typeLine(line, index) {
+                            return new Promise((resolve) => {
+                                const span = document.createElement('span');
+                                span.innerHTML = ''; // Initially empty
+                                typingEffectElement[0].appendChild(span);
+    
+                                let charIndex = 0;
+                                const interval = setInterval(() => {
+                                    span.innerHTML += line.charAt(charIndex); // Add one character at a time
+                                    charIndex++;
+    
+                                    if (charIndex === line.length) {
+                                        clearInterval(interval);
+                                        // Add a line break if it's the end of a <br> sequence
+                                        if (index < lines.length - 1 && lines[index + 1].match(/<br\s*\/?>/)) {
+                                            typingEffectElement[0].appendChild(document.createElement('br'));
+                                        }
+                                        resolve(); // Resolve promise after line typing is complete
+                                    }
+                                }, 20); // Adjust typing speed (milliseconds per character)
+                                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                            });
+                        }
+    
+                        // Chain line animations sequentially
+                        (async function typeLines() {
+                            for (let i = 0; i < lines.length; i++) {
+                                // Only process non-empty lines
+                                if (lines[i].trim() !== '') {
+                                    // If it's a <br> tag, insert an actual line break
+                                    if (lines[i].match(/<br\s*\/?>/)) {
+                                        typingEffectElement[0].appendChild(document.createElement('br'));
+                                    } else {
+                                        await typeLine(lines[i].trim(), i);
+                                    }
+                                }
+                            }
+                        })();
+                    },
+                    error: function () {
+                        $('#chatbox').append('<div class="chat-message bot-message"><p>Sorry, something went wrong.</p></div>');
+                    }
+                });
+            }
+
+            function startVoiceRecognition() {
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = 'en-US';
+                recognition.interimResults = false;
+
+                recognition.onstart = function () {
+                    const userMessage = $('#user_input')
+                    console.log('Voice recognition started');
+                    userMessage.attr('placeholder', 'Listening... say something....');
+                };
+
+                recognition.onresult = function (event) {
+                    const transcript = event.results[0][0].transcript;
+                    $('#user_input').val(transcript);
+                    sendMessage();
+                }
+
+                recognition.onerror = function (event) {
+                    console.error('Voice recognition error:', event.error);
+                };
+
+                recognition.start();
+            }
+
+            function textToSpeech(text) {
+                // Create a temporary element to strip HTML tags
+                const tempElement = document.createElement('div');
+                tempElement.innerHTML = text;
+                const plainText = tempElement.textContent || tempElement.innerText || '';
+
+                // Set up the speech synthesis
+                const speech = new SpeechSynthesisUtterance();
+                speech.text = plainText; // Use plain text without HTML tags
+                speech.lang = 'en-US';
+                speech.rate = 1; // Adjust speed if necessary
+                speech.pitch = 1; // Adjust pitch if necessary
+                window.speechSynthesis.speak(speech);
+            }
+    
+            // Toggle sidebar
+            $('#toggleSidebar').click(function () {
+                $('#sidebar').toggleClass('collapsed');
+                $('#header').toggleClass('collapsed'); // Adjust header position
+                $(this).find('i').toggleClass('fa-times fa-bars'); // Change icon based on state
+    
+                // Change toggle button color based on sidebar state
+                if ($('#sidebar').hasClass('collapsed')) {
+                    $(this).css('color', '#0463FA'); // Change to sidebar color when collapsed
+                } else {
+                    $(this).css('color', 'white'); // Reset to default when expanded
+                }
+            });
+        });
+    </script>            
+
+</body>
+
+</html>
